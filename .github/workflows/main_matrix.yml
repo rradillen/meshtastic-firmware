@@ -337,24 +337,9 @@ jobs:
           merge-multiple: true
           path: ./output/pio-deps-native-tft
 
-      - name: Zip Linux sources
-        working-directory: output
-        run: |
-          zip -j -9 -r ./meshtasticd-${{ steps.version.outputs.deb }}-src.zip ./debian-src
-          zip -9 -r ./platformio-deps-native-tft-${{ steps.version.outputs.long }}.zip ./pio-deps-native-tft
-
       # For diagnostics
       - name: Display structure of downloaded files
         run: ls -lR
-
-      - name: Add Linux sources to GtiHub Release
-        # Only run when targeting master branch with workflow_dispatch
-        if: ${{ github.ref_name == 'master' }}
-        run: |
-          gh release upload v${{ steps.version.outputs.long }} ./output/meshtasticd-${{ steps.version.outputs.deb }}-src.zip
-          gh release upload v${{ steps.version.outputs.long }} ./output/platformio-deps-native-tft-${{ steps.version.outputs.long }}.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release-firmware:
     strategy:
